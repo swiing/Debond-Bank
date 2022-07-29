@@ -14,27 +14,20 @@ pragma solidity >=0.8.0;
     limitations under the License.
 */
 
-import "../BankBondManager.sol";
+import "./IBankBondManager.sol";
+
 
 interface IBankData {
 
     function updateCanPurchase(uint classIdIn, uint classIdOut, bool _canPurchase) external;
 
-    function setTokenInterestRateSupply(address tokenAddress, BankBondManager.InterestRateType, uint amount) external;
+    function setTokenInterestRateSupply(address tokenAddress, IBankBondManager.InterestRateType, uint amount) external;
 
     function setTokenTotalSupplyAtNonce(address tokenAddress, uint nonceId, uint amount) external;
 
     function pushClassIdPerToken(address tokenAddress, uint classId) external;
 
     function addNewClassId(uint classId) external;
-
-    function setTokenAddressWithBondValue(uint value, address tokenAddress) external;
-
-    function setBondValueFromTokenAddress(address tokenAddress, uint value) external;
-
-    function setTokenAddressExists(address tokenAddress, bool exist) external;
-
-    function incrementTokenAddressCount() external;
 
     function setBenchmarkInterest(uint benchmarkInterest) external;
 
@@ -47,19 +40,11 @@ interface IBankData {
 
     function getClasses() external view returns (uint[] memory);
 
-    function getTokenInterestRateSupply(address tokenAddress, BankBondManager.InterestRateType) external view returns (uint);
+    function getTokenInterestRateSupply(address tokenAddress, IBankBondManager.InterestRateType) external view returns (uint);
 
     function getClassIdsFromTokenAddress(address tokenAddress) external view returns (uint[] memory);
 
-    function getTokenAddressFromBondValue(uint value) external view returns (address);
-
     function getTokenTotalSupplyAtNonce(address tokenAddress, uint nonceId) external view returns (uint);
-
-    function getBondValueFromTokenAddress(address tokenAddress) external view returns (uint);
-
-    function tokenAddressExist(address tokenAddress) external view returns (bool);
-
-    function tokenAddressCount() external view returns (uint);
 
     function getBenchmarkInterest() external view returns (uint);
 

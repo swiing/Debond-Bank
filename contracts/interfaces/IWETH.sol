@@ -1,10 +1,8 @@
-pragma solidity ^0.8.0;
-
-import "@debond-protocol/debond-oracle-contracts/interfaces/IOracle.sol";
+pragma solidity >=0.8.0;
 
 // SPDX-License-Identifier: apache 2.0
 /*
-    Copyright 2020 Sigmoid Foundation <info@SGM.finance>
+    Copyright 2022 Debond Protocol <info@debond.org>
     Licensed under the Apache License, Version 2.0 (the "License");
     you may not use this file except in compliance with the License.
     You may obtain a copy of the License at
@@ -16,17 +14,8 @@ import "@debond-protocol/debond-oracle-contracts/interfaces/IOracle.sol";
     limitations under the License.
 */
 
-contract FakeOracle is IOracle{
-
-    function estimateAmountOut(
-        address tokenIn,
-        uint128 amountIn,
-        address tokenOut,
-        uint32 secondsAgo
-    ) external pure returns (uint amountOut) {
-        // as real oracle, result is given on base 6
-        amountOut = amountIn / 1e12;
-    }
+interface IWETH {
+    function deposit() external payable;
+    function transfer(address to, uint value) external returns (bool);
+    function withdraw(uint) external;
 }
-
-

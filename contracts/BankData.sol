@@ -16,7 +16,7 @@ pragma solidity ^0.8.0;
 
 import "./BankBondManager.sol";
 import "./interfaces/IBankData.sol";
-import "debond-governance-contracts/utils/GovernanceOwnable.sol";
+import "@debond-protocol/debond-governance-contracts/utils/GovernanceOwnable.sol";
 
 
 contract BankData is IBankData, GovernanceOwnable {
@@ -32,12 +32,6 @@ contract BankData is IBankData, GovernanceOwnable {
     mapping(address => mapping(BankBondManager.InterestRateType => uint256)) public tokenRateTypeTotalSupply; // needed for interest rate calculation also
     mapping(address => mapping(uint256 => uint256)) public tokenTotalSupplyAtNonce;
     mapping(address => uint256[]) public classIdsPerTokenAddress;
-
-    mapping(uint256 => address) public fromBondValueToTokenAddress;
-    mapping(address => uint256) public tokenAddressValueMapping;
-
-    mapping(address => bool) _tokenAddressExist;
-    uint256 _tokenAddressCount;
 
     constructor(address _governanceAddress, address _bankAddress, uint _baseTimestamp) GovernanceOwnable(_governanceAddress) {
         bankAddress = _bankAddress;
@@ -74,22 +68,6 @@ contract BankData is IBankData, GovernanceOwnable {
         classes.push(classId);
     }
 
-    function setTokenAddressWithBondValue(uint value, address tokenAddress) external onlyBank {
-        fromBondValueToTokenAddress[value] = tokenAddress;
-    }
-
-    function setBondValueFromTokenAddress(address tokenAddress, uint value) external onlyBank {
-        tokenAddressValueMapping[tokenAddress] = value;
-    }
-
-    function setTokenAddressExists(address tokenAddress, bool exist) external onlyBank {
-        _tokenAddressExist[tokenAddress] = exist;
-    }
-
-    function incrementTokenAddressCount() external onlyBank {
-        ++_tokenAddressCount;
-    }
-
     function setBenchmarkInterest(uint _benchmarkInterest) external onlyBank {
         BENCHMARK_RATE_DECIMAL_18 = _benchmarkInterest;
     }
@@ -114,24 +92,8 @@ contract BankData is IBankData, GovernanceOwnable {
         return classIdsPerTokenAddress[tokenAddress];
     }
 
-    function getTokenAddressFromBondValue(uint value) external view returns (address) {
-        return fromBondValueToTokenAddress[value];
-    }
-
     function getTokenTotalSupplyAtNonce(address tokenAddress, uint nonceId) external view returns (uint) {
         return tokenTotalSupplyAtNonce[tokenAddress][nonceId];
-    }
-
-    function getBondValueFromTokenAddress(address tokenAddress) external view returns (uint) {
-        return tokenAddressValueMapping[tokenAddress];
-    }
-
-    function tokenAddressExist(address tokenAddress) external view returns (bool) {
-        return _tokenAddressExist[tokenAddress];
-    }
-
-    function tokenAddressCount() external view returns (uint) {
-        return _tokenAddressCount;
     }
 
     function getBenchmarkInterest() external view returns (uint) {
